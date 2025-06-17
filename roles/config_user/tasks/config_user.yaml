@@ -1,0 +1,16 @@
+- name: Ensuring user group exists
+  group:
+    name: "{{ user_map[item].user_group }}"
+    state: present
+    gid: "{{ user_map[item].group_id }}"
+  with_items: "{{ users }}"
+
+- name: Create user
+  user:
+    name: "{{ item }}"
+    uid: "{{user_map[item].user_id }}"
+    group: "{{user_map[item].user_group }}"
+    password: "{{ dev_passwd_current }}"
+    home: "{{ user_map[item].home_dir }}"
+    state: present
+  with_items: "{{ users }}"

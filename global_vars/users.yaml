@@ -1,0 +1,2 @@
+user_map:
+  "dev" : { user_id: "1023", home_dir: "/home/dev", user_group: "development", group_id: "2000" }

@@ -1,0 +1,12 @@
+all:
+  vars:
+
+update_hosts:
+  children:
+    machines:
+    
+machines:
+  vars:
+  hosts:
+    10.0.0.6:
+

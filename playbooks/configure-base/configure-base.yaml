@@ -1,0 +1,14 @@
+- name: Configure dev user
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+  
+  vars_files:
+    - "../../global_vars/users.yaml"
+    - "../../global_vars/passwords.yaml"
+  vars:
+    users:
+      - "dev"
+
+  roles:
+    - role: "../roles/config_user"
