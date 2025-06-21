@@ -12,3 +12,28 @@
 
   roles:
     - role: "../roles/config_user"
+
+- name: Ensuring base packages are install_listed
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+
+  vars:
+    listed_packages:
+      - epel-release
+      - podman
+      - vim
+      - curl
+      - wget
+      - git
+      - telnet
+      - bind-utils
+      - tree
+      - chrony
+      - zip
+      - unzip
+      - ipa-client
+  
+  roles:
+    - role: "../roles/install_listed"
+
