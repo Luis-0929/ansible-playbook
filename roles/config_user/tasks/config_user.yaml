@@ -14,3 +14,12 @@
     home: "{{ user_map[item].home_dir }}"
     state: present
   with_items: "{{ users }}"
+
+- name: Give sudo rights to dev user
+  copy:
+    dest: /etc/sudoers.d/developer
+    content: "dev ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s' 
