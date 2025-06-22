@@ -37,3 +37,11 @@
   roles:
     - role: "../roles/install_listed"
 
+
+- name: Configure user for podman
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+
+  roles: 
+    - role: "../roles/config_user_podman"
