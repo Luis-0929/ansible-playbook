@@ -1,0 +1,25 @@
+---
+- name: Run commands to enable {{ podman_user }} auto login
+  shell: |
+    loginctl enable-linger {{ podman_user }}
+
+- name: Ensure local systemd user conf exists
+  become_user: "{{ podman_user }}"
+  shell: |
+    mkdir -p /home/{{podman_user}}/.config/systemd/user
+
+- name: Get {{ podman_user }} id
+  command: id -u {{podman_user}}
+  register: uid
+
+- name: Add XDG runtime to bash_profile
+  become_user: "{{ podman_user }}"
+  lineinfile:
+    path: /home/{{ podman_user }}/.bash_profile
+    regexp: ^export XDG_RUNTIME_DIR
+    line: export XDG_RUNTIME_DIR=/run/user/$UID
+
+# - name: reset podman # This might or might not be needed havent decided yet
+#   shell: |
+#     yes | podman system reset
+  

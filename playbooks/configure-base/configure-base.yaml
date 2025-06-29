@@ -11,7 +11,7 @@
       - "dev"
 
   roles:
-    - role: "../roles/config_user"
+    - role: "config_user"
 
 - name: Ensuring base packages are install_listed
   hosts: update_hosts
@@ -35,7 +35,7 @@
       - ipa-client
   
   roles:
-    - role: "../roles/install_listed"
+    - role: "install_listed"
 
 
 - name: Configure user for podman
@@ -44,4 +44,4 @@
   become_method: sudo
 
   roles: 
-    - role: "../roles/config_user_podman"
+    - role: "config_user_podman"
