@@ -22,4 +22,3 @@
 # - name: reset podman # This might or might not be needed havent decided yet
 #   shell: |
 #     yes | podman system reset
-  

@@ -1,0 +1,13 @@
+all:
+  vars:
+    podman_user: dev
+    hostname: test-vm
+
+update_hosts:
+  children:
+    machines:
+    
+machines:
+  hosts:
+    10.0.0.111: #  Test VM
+

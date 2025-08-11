@@ -4,12 +4,11 @@
   become_method: sudo
   
   vars_files:
-    - "../../global_vars/users.yaml"
-    - "../../global_vars/passwords.yaml"
+    #- "../global_vars/users.yaml"
+    - "../global_vars/passwords.yaml"
   vars:
     users:
       - "dev"
-
   roles:
     - role: "config_user"
 

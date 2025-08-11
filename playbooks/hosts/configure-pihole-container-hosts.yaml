@@ -1,13 +1,11 @@
 all:
   vars:
+    podman_user: dev
 
 update_hosts:
   children:
     machines:
     
 machines:
-  vars:
-    podman_user: dev
   hosts:
-    10.0.0.6:
-
+    10.0.0.111: #  Test VM

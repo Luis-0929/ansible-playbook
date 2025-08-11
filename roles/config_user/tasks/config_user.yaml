@@ -1,3 +1,8 @@
+- name: Ensure correct hostname is set
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
+    use: systemd
+
 - name: Ensuring user group exists
   group:
     name: "{{ user_map[item].user_group }}"

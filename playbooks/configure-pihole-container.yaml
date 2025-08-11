@@ -1,0 +1,11 @@
+- name: Import base config playbook
+  import_playbook: configure-base.yaml
+  tags: [config_base]
+
+- name: Configure pi hole for the user {{ podman_user }}
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+
+  roles:
+    - role: "podman_pi_hole_config"

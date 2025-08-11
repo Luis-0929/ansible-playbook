@@ -1,0 +1,36 @@
+---
+- name: Container config
+  become_user: "{{ podman_user }}"
+  become: true
+
+  containers.podman.podman_container:
+    detach: true
+    name: "pi-hole"
+    hostname: "pi-hole"
+    image: pihole/pihole:latest
+    ports:
+      - "5353:53/tcp"
+      - "5353:53/udp"
+      - "8080:80/tcp"
+      - "8443:443/tcp"
+    env:
+      TZ: "America/Los_Angeles"
+      FTLCONF_webserver_api_password: "setup123"
+    volumes: "pihole-data:/etc/pihole"
+    state: started
+    recreate: true
+
+- name: Open needed ports
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    zone: public
+    state: enabled
+    immediate: true
+  with_items:
+    - "5353/tcp"
+    - "5353/udp"
+    - "8080/tcp"
+    - "8443/tcp"
+
+
