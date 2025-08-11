@@ -1,6 +1,7 @@
 all:
   vars:
     podman_user: dev
+    hostname: test-vm-luis
 
 update_hosts:
   children:

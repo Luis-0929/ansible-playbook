@@ -1,24 +1,30 @@
 ---
-- name: Container config
+- name: Ensure that .config/containers/systemd exists
+  ansible.builtin.file:
+    path: "/home/{{ podman_user }}/.config/containers/systemd"
+    state: directory
+    mode: "755"
+    owner: "{{ podman_user }}"
+    group: development
+
+- name: Deploy the quadlet container
   become_user: "{{ podman_user }}"
   become: true
+  ansible.builtin.copy:
+    src: pi-hole.container
+    dest: "/home/{{ podman_user }}/.config/containers/systemd/pi-hole.container"
+    mode: "644"
 
-  containers.podman.podman_container:
-    detach: true
-    name: "pi-hole"
-    hostname: "pi-hole"
-    image: pihole/pihole:latest
-    ports:
-      - "5353:53/tcp"
-      - "5353:53/udp"
-      - "8080:80/tcp"
-      - "8443:443/tcp"
-    env:
-      TZ: "America/Los_Angeles"
-      FTLCONF_webserver_api_password: "setup123"
-    volumes: "pihole-data:/etc/pihole"
+- name: Reload systemd and start the containers
+  become_user: "{{ podman_user }}"
+  become: true
+  ansible.builtin.systemd_service:
+    name: pi-hole.service
     state: started
-    recreate: true
+    daemon_reload: true
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
 
 - name: Open needed ports
   ansible.posix.firewalld:
@@ -31,6 +37,6 @@
     - "5353/tcp"
     - "5353/udp"
     - "8080/tcp"
-    - "8443/tcp"
+    - "8443/tcp" 
 
 
