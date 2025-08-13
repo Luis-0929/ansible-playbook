@@ -1,1 +1,2 @@
 2025-06-21 19:02:05,862 p=5762 u=luis n=ansible | ERROR! the playbook: configure-base/configure-base.yaml could not be found
+2025-08-10 23:24:21,292 p=712 u=luis n=ansible | ERROR! the playbook: configure-pihole-container.yaml could not be found

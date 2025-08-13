@@ -23,4 +23,4 @@ Volume=pihole-data:/etc/pihole
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
