@@ -4,11 +4,11 @@
   become_method: sudo
   
   vars_files:
-    #- "../global_vars/users.yaml"
     - "../global_vars/passwords.yaml"
   vars:
     users:
       - "dev"
+      #- "admin"
   roles:
     - role: "config_user"
 
@@ -28,10 +28,12 @@
       - telnet
       - bind-utils
       - tree
+      - gcc
       - chrony
       - zip
       - unzip
       - ipa-client
+      - tigervnc-server
   
   roles:
     - role: "install_listed"
@@ -44,3 +46,19 @@
 
   roles: 
     - role: "config_user_podman"
+
+- name: Configure Desktop Env
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+    
+  roles:
+    - role: "config_desktop_env"
+
+- name: Configure tiger VNC server
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+
+  roles:
+    - role: "config_vnc_server"

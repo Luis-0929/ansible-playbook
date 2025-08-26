@@ -1,0 +1,9 @@
+---
+- name: Use group install to get the gnome GUI
+  shell: | 
+    dnf groupinstall "Server with GUI" -y
+
+- name: Set system to boot into the GUI
+  shell: | 
+    systemctl set-default graphical.target
+    systemctl isolate graphical.target

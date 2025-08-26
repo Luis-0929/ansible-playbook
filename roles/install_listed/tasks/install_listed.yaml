@@ -1,4 +1,9 @@
 ---
+- name: Update the DNF repo
+  dnf:
+    state: latest
+    update_cache: true
+
 - name: Install the listed packages {{ listed_packages }}
   dnf:
     name: "{{ listed_packages }}"

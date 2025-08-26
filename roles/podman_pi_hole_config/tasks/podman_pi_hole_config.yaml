@@ -15,7 +15,7 @@
     dest: "/home/{{ podman_user }}/.config/containers/systemd/pi-hole.container"
     mode: "644"
 
-- name: Deploy the quadet container for unbound
+# - name: Deploy the quadet container for unbound
 
 - name: Reload systemd and start the containers
   become_user: "{{ podman_user }}"
@@ -28,17 +28,18 @@
   environment:
     XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
 
-- name: Open needed ports
+- name: Forward ports to container high ports
   ansible.posix.firewalld:
-    port: "{{ item }}"
+    rich_rule: 'rule family="ipv4" forward-port port={{ item.port }} protocol={{ item.proto }} to-port={{ item.to_port }}'
     permanent: true
     zone: public
     state: enabled
     immediate: true
-  with_items:
-    - "5353/tcp"
-    - "5353/udp"
-    - "8080/tcp"
-    - "8443/tcp" 
+  loop:
+    - { port: 53,  proto: tcp, to_port: 5353 }
+    - { port: 53,  proto: udp, to_port: 5353 }
+    - { port: 80,  proto: tcp, to_port: 8080 }
+    - { port: 443, proto: tcp, to_port: 8443 }
+
 
 
