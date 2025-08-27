@@ -28,3 +28,33 @@
     group: root
     mode: '0440'
     validate: 'visudo -cf %s' 
+
+- name: Change root password
+  user:
+    name: root
+    password: "{{ root_passwd_current }}"
+
+- name: Ensuring admin group exists
+  group:
+    name: "{{ user_map['admin'].user_group }}"
+    state: present
+    gid: "{{ user_map['admin'].group_id }}"
+  
+
+- name: Create admin user
+  user:
+    name: "{{ user_map['admin'].username }}"
+    uid: "{{ user_map['admin'].user_id}}"
+    group: "{{ user_map['admin'].group_id }}"
+    password: "{{ admin_passwd_current }}"
+    home: "{{ user_map['admin'].home_dir }}"
+    state: present
+
+- name: Give sudo rights to admin user
+  copy:
+    dest: /etc/sudoers.d/developer
+    content: "admin ALL=(ALL) NOPASSWD:ALL\n"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s' 

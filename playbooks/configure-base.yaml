@@ -1,4 +1,4 @@
-- name: Configure dev user
+- name: Configure users
   hosts: update_hosts
   become: true
   become_method: sudo
@@ -8,9 +8,9 @@
   vars:
     users:
       - "dev"
-      #- "admin"
   roles:
     - role: "config_user"
+  tags: [config_dev]
 
 - name: Ensuring base packages are install_listed
   hosts: update_hosts
@@ -37,6 +37,7 @@
   
   roles:
     - role: "install_listed"
+  tags: [install_base]
 
 
 - name: Configure user for podman
@@ -54,6 +55,7 @@
     
   roles:
     - role: "config_desktop_env"
+  tags: [config_podman_user]
 
 - name: Configure tiger VNC server
   hosts: update_hosts
@@ -62,3 +64,4 @@
 
   roles:
     - role: "config_vnc_server"
+  tags: [config_tigervnc]
