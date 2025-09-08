@@ -8,7 +8,7 @@
   vars:
     users:
       - "dev"
-  roles:
+  roles:  
     - role: "config_user"
   tags: [config_dev]
 
@@ -33,7 +33,7 @@
       - zip
       - unzip
       - ipa-client
-      - tigervnc-server
+      - freerdp
   
   roles:
     - role: "install_listed"
@@ -47,21 +47,29 @@
 
   roles: 
     - role: "config_user_podman"
+  tags: [config_podman_user]
 
 - name: Configure Desktop Env
   hosts: update_hosts
   become: true
   become_method: sudo
-    
+  
   roles:
     - role: "config_desktop_env"
-  tags: [config_podman_user]
+  tags: [config_desktop]
 
-- name: Configure tiger VNC server
+- name: Configure RDP server
   hosts: update_hosts
   become: true
   become_method: sudo
-
+  vars_prompt:
+    - name: rdp_user
+      prompt: "Enter the RDP username"
+      private: no
+    - name: rdp_passwd
+      prompt: "Enter the RDP users passwd"
+      private: yes
+      confirm: yes
   roles:
-    - role: "config_vnc_server"
-  tags: [config_tigervnc]
+    - role: "config_rdp_server"
+  tags: [config_rdp]

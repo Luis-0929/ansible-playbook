@@ -1,3 +1,4 @@
 user_map:
   "admin" : { user_id: "1023", home_dir: "/home/admin", user_group: "administrative", group_id: "1999", username: "admin" }
   "dev" : { user_id: "1024", home_dir: "/home/dev", user_group: "development", group_id: "2000", username: "dev" }
+  "podman" : { user_id: "1025", home_dir: "/home/podman", user_group: "development", group_id: "2000", username: "podman" }
