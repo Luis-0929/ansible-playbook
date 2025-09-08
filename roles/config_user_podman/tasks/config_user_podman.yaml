@@ -18,7 +18,3 @@
     path: /home/{{ podman_user }}/.bash_profile
     regexp: ^export XDG_RUNTIME_DIR
     line: export XDG_RUNTIME_DIR=/run/user/$UID
-
-# - name: reset podman # This might or might not be needed havent decided yet
-#   shell: |
-#     yes | podman system reset

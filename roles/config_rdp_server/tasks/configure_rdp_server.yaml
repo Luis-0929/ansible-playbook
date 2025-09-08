@@ -1,0 +1,34 @@
+---
+- name: Create a directory for the self-signed TLS certificate as the gnome-remote-desktop user
+  become_user: gnome-remote-desktop
+  shell: | 
+    mkdir -p ~gnome-remote-desktop/.local/share/gnome-remote-desktop
+
+- name: Create the rdp tls cert
+  become_user: gnome-remote-desktop
+  shell: |
+    winpr-makecert -silent -rdp -path ~gnome-remote-desktop/.local/share/gnome-remote-desktop tls
+
+- name: Copy TLS key and cert
+  shell: | 
+    grdctl --system rdp set-tls-key ~gnome-remote-desktop/.local/share/gnome-remote-desktop/tls.key
+    grdctl --system rdp set-tls-cert ~gnome-remote-desktop/.local/share/gnome-remote-desktop/tls.crt
+
+- name: Set the RDP Credentials 
+  shell: | 
+    grdctl --system rdp set-credentials {{ rdp_user }} {{ rdp_passwd }}
+
+- name: Enable RDP backend
+  shell: |
+    grdctl --system rdp enable
+
+- name: Permitting traffic in default zone for rdp service
+  ansible.posix.firewalld:
+    service: rdp
+    permanent: true
+    state: enabled
+    immediate: true
+
+- name: Restart gnome-remote-desktop service
+  shell: |
+    systemctl restart gnome-remote-desktop.service

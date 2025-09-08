@@ -10,7 +10,7 @@
     gid: "{{ user_map[item].group_id }}"
   with_items: "{{ users }}"
 
-- name: Create user
+- name: Create user dev
   user:
     name: "{{ item }}"
     uid: "{{user_map[item].user_id }}"
@@ -57,4 +57,13 @@
     owner: root
     group: root
     mode: '0440'
-    validate: 'visudo -cf %s' 
+    validate: 'visudo -cf %s'
+
+- name: Create podman user
+  user:
+    name: "{{ user_map['podman'].username }}"
+    uid: "{{ user_map['podman'].user_id}}"
+    group: "{{ user_map['podman'].group_id }}"
+    password: "{{ podman_passwd_current }}"
+    home: "{{ user_map['podman'].home_dir }}"
+    state: present
