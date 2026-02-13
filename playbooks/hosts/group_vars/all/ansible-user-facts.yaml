@@ -1,0 +1,5 @@
+vault_dir: "../vault/secrets"
+ansible_user: ansible
+ansible_ssh_pass: "{{ (lookup('file', '{{ vault_dir }}/ansible-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
+ansible_become_password: "{{ (lookup('file', '{{ vault_dir }}/ansible-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
+ansible_sudo_password: "{{ (lookup('file', '{{ vault_dir }}/ansible-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"

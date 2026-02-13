@@ -1,16 +1,36 @@
+---
+- name: Set the ansible user
+  hosts: update_hosts
+  become: true
+  gather_facts: false
+  become_method: sudo
+
+  roles:
+    - role: set_ansible_user
+
+- name: Extend the LVM partition for {{ mode }}
+  hosts: update_hosts
+  become: true
+  become_method: sudo
+
+  roles:
+    - role: config_base/extend_lvm
+
 - name: Configure users
   hosts: update_hosts
   become: true
   become_method: sudo
-  
+
   vars_files:
-    - "../global_vars/passwords.yaml"
+    - ../vault/secrets/vm_user_passwords_vault.yaml
+  
   vars:
     users:
-      - "dev"
+      - "admin"
+      - "ansible"
+      - "podman"
   roles:  
-    - role: "config_user"
-  tags: [config_dev]
+    - role: config_base/config_users
 
 - name: Ensuring base packages are install_listed
   hosts: update_hosts
@@ -37,39 +57,37 @@
   
   roles:
     - role: "install_listed"
-  tags: [install_base]
 
+# - name: Configure user for podman
+#   hosts: update_hosts
+#   become: true
+#   become_method: sudo
 
-- name: Configure user for podman
-  hosts: update_hosts
-  become: true
-  become_method: sudo
+#   roles: 
+#     - role: "config_user_podman"
+#   tags: [config_podman_user]
 
-  roles: 
-    - role: "config_user_podman"
-  tags: [config_podman_user]
-
-- name: Configure Desktop Env
-  hosts: update_hosts
-  become: true
-  become_method: sudo
+# - name: Configure Desktop Env
+#   hosts: update_hosts
+#   become: true
+#   become_method: sudo
   
-  roles:
-    - role: "config_desktop_env"
-  tags: [config_desktop]
+#   roles:
+#     - role: "config_desktop_env"
+#   tags: [config_desktop]
 
-- name: Configure RDP server
-  hosts: update_hosts
-  become: true
-  become_method: sudo
-  vars_prompt:
-    - name: rdp_user
-      prompt: "Enter the RDP username"
-      private: no
-    - name: rdp_passwd
-      prompt: "Enter the RDP users passwd"
-      private: yes
-      confirm: yes
-  roles:
-    - role: "config_rdp_server"
-  tags: [config_rdp]
+# - name: Configure RDP server
+#   hosts: update_hosts
+#   become: true
+#   become_method: sudo
+#   vars_prompt:
+#     - name: rdp_user
+#       prompt: "Enter the RDP username"
+#       private: no
+#     - name: rdp_passwd
+#       prompt: "Enter the RDP users passwd"
+#       private: yes
+#       confirm: yes
+#   roles:
+#     - role: "config_rdp_server"
+#   tags: [config_rdp]

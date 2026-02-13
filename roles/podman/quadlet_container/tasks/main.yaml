@@ -1,0 +1,117 @@
+---
+- name: Get uid of {{ podman_user }}
+  ansible.builtin.command: id -u {{ podman_user }}
+  register: uid
+- name: Enable podman socket if required
+  ansible.builtin.systemd_service:
+    name: podman.socket
+    state: started
+    enabled: true
+    scope: user
+  become: true
+  become_user: "{{ podman_user }}"
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
+  when: podman_socket is true
+- name: Ensure rootless podman unit search path and config mount locations exist
+  ansible.builtin.file:
+    dest: "{{ item }}"
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: "755"
+    state: directory
+  with_items:
+    - /home/{{ podman_user }}/.config/containers/systemd/{{ container_name }}
+    - /home/{{ podman_user }}/.config/containers/config/{{ container_name }}
+- name: Copy config mount if defined for {{ container_name }}
+  ansible.builtin.template:
+    src: "{{ config_mount_loc }}"
+    dest: /home/{{ podman_user }}/.config/containers/config/{{ container_name }}/{{ config_mount }}
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: '0644'
+  when: config_mount_loc is defined and config_mount is defined
+- name: Copy config mount if defined for {{ container_name }}
+  ansible.builtin.copy:
+    src: "{{ config_mount_loc }}"
+    dest: /home/{{ podman_user }}/.config/containers/config/{{ container_name }}
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: preserve
+  when: config_mount_loc is defined and config_mount is not defined
+- name: Copy Container file for {{ container_name }}
+  ansible.builtin.template:
+    src: container.j2
+    dest: /home/{{ podman_user }}/.config/containers/systemd/{{ container_name }}/{{ container_name }}.container
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: "644"
+- name: Copy Volume file for {{ container_name }}
+  ansible.builtin.template:
+    src: volume.j2
+    dest: /home/{{ podman_user }}/.config/containers/systemd/{{ container_name }}/{{ container_volume.name }}.volume
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: "644"
+  when: container_volumes is defined and container_volume.create is true
+  loop: "{{ container_volumes }}"
+  loop_control:
+    loop_var: container_volume
+- name: Link home directory to volume
+  ansible.builtin.file:
+    src: /home/{{ podman_user }}/.local/share/containers/storage/volumes/{{ container_volume.name }}/_data/
+    dest: /home/{{ podman_user }}/{{ container_volume.name }}
+    state: link
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    force: true
+  when:
+    - container_volumes is defined
+    - container_volume.create is true
+    - container_volume.link_to_home is true
+  loop: "{{ container_volumes }}"
+  loop_control:
+    loop_var: container_volume
+- name: Copy Image file for {{ container_name }}
+  ansible.builtin.template:
+    src: image.j2
+    dest: /home/{{ podman_user }}/.config/containers/systemd/{{ container_name }}/{{ container_name }}.image
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: "644"
+  when: local_container_image is defined
+- name: Set Privileged ports if set
+  ansible.builtin.shell: |
+    echo "net.ipv4.ip_unprivileged_port_start={{ rootless_port_start }}" > /etc/sysctl.d/user_priv_ports.conf
+    sysctl net.ipv4.ip_unprivileged_port_start={{ rootless_port_start }}
+  when: rootless_port_start is defined
+- name: Set Custom aardvark dns port
+  ansible.builtin.template:
+    src: containers.conf.j2
+    dest: /home/{{ podman_user }}/.config/containers/containers.conf
+    owner: "{{ podman_user }}"
+    group: "{{ user_group }}"
+    mode: "644"
+  when: custom_aardvark is defined
+- name: Reload Systemd User service
+  ansible.builtin.systemd_service:
+    name: "{{ container_name }}.service"
+    state: started
+    daemon_reload: true
+    scope: user
+  become: true
+  become_user: "{{ podman_user }}"
+  when: pod_name is not defined
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
+- name: Reload Systemd User POD service for {{ pod_name }}
+  ansible.builtin.systemd_service:
+    name: "{{ pod_name }}-pod.service"
+    state: started
+    daemon_reload: true
+    scope: user
+  become: true
+  become_user: "{{ podman_user }}"
+  when: pod_name is defined
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}

@@ -1,0 +1,19 @@
+[Volume]
+VolumeName={{ container_volume.name }}
+User=%U
+Group=%G
+
+{% if container_volume.labels is defined %}
+{% for label in container_volume.labels %}
+Label={{ label }}
+{% endfor %}
+{%endif%}
+{% if container_volume.type is defined %}
+Type={{ container_volume.type }}
+{%endif%}
+{% if container_volume.device is defined %}
+Device={{ container_volume.device }}
+{%endif%}
+{% if container_volume.options is defined %}
+Options={{ container_volume.options }}
+{%endif%}

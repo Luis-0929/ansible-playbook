@@ -1,0 +1,2 @@
+ansible_ssh_pass:
+ansible_become_password: "{{ansible_ssh_pass}}"

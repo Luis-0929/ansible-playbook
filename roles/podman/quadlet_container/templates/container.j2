@@ -1,0 +1,93 @@
+[Unit]
+Description={{ container_description }}
+{% if unit_config is defined %}
+{% for config in unit_config  %}
+{{ config }}
+{% endfor %}
+{% endif %}
+
+
+[Container]
+ContainerName={{ container_name }}
+Image={{ container_image }}
+# podman will restart container if local image is updated
+AutoUpdate=local
+{% if extra_args is defined %}
+Exec={{ extra_args }}
+
+{% endif %}
+{% if network_name is defined %}
+Network={{ network_name }}
+{% endif %}
+{% if container_hostname is defined %}
+HostName={{ container_hostname }}
+{% endif %}
+{% if health_cmds is defined %}
+HealthCmd={{ health_cmds.cmd }}
+HealthInterval={{ health_cmds.interval }}
+HealthRetries={{ health_cmds.retries }}
+HealthStartPeriod={{ health_cmds.startup }}
+HealthOnFailure={{ health_cmds.onfail }}
+{% endif %}
+
+{% if publish_ports is defined %}
+{% for port in publish_ports %}
+# {{ port.desc }}
+PublishPort={{ port.port }}
+{% endfor %}
+{% endif %}
+{% if container_volumes is defined %}
+{% for volume in container_volumes %}
+Volume={{ volume.name }}.volume:{{ volume.path }}
+{% endfor %}
+{% endif %}
+{% if container_labels is defined %}
+{% for label in container_labels %}
+Label={{ label }}
+{% endfor %}
+{% endif %}
+
+{% if security_label_type is defined %}
+SecurityLabelType={{ security_label_type }}
+{% endif %}
+{% if timezone is defined %}
+Timezone={{ timezone }}
+
+{% else %}
+Timezone=America/Los_Angeles
+
+{% endif %}
+{% if add_capabilities is defined %}
+{% for cap in add_capabilities%}
+AddCapability={{ cap }}
+{% endfor%}
+{% endif %}
+{% if environments is defined %}
+{% for environment in environments %}
+Environment={{ environment }}
+{% endfor %}
+{% endif %}
+
+{% if pod_name is defined %}
+Pod={{ pod_name }}.pod
+{% endif %}
+{% if user_ns is defined %}
+{% for userns in user_ns %}
+UserNS={{ userns }}
+{% endfor %}
+{% endif %}
+
+{% if service_config is not defined %}
+[Service]
+Restart=always
+TimeoutStartSec=300
+{% else %}
+[Service]
+{% for config in service_config  %}
+{{ config }}
+{% endfor %}
+{% endif %}
+
+
+[Install]
+WantedBy=default.target

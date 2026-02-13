@@ -2,6 +2,7 @@ all:
   vars:
     podman_user: podman
     hostname: dev-vm
+    mode: development
 
 update_hosts:
   children:
@@ -9,5 +10,5 @@ update_hosts:
     
 machines:
   hosts:
-    10.0.0.169 #  Test VM
+    10.0.0.100 #Dev VM
 
