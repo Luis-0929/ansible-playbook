@@ -6,7 +6,7 @@
   become_method: sudo
 
   roles:
-    - role: set_ansible_user
+    - role: config_base_roles/set_ansible_user
 
 - name: Extend the LVM partition for {{ mode }}
   hosts: update_hosts
@@ -14,7 +14,7 @@
   become_method: sudo
 
   roles:
-    - role: config_base/extend_lvm
+    - role: config_base_roles/extend_lvm
 
 - name: Configure users
   hosts: update_hosts
@@ -30,7 +30,7 @@
       - "ansible"
       - "podman"
   roles:  
-    - role: config_base/config_users
+    - role: config_base_roles/config_users
 
 - name: Ensuring base packages are install_listed
   hosts: update_hosts
@@ -56,16 +56,15 @@
       - freerdp
   
   roles:
-    - role: "install_listed"
+    - role: install_listed
 
-# - name: Configure user for podman
-#   hosts: update_hosts
-#   become: true
-#   become_method: sudo
+- name: Configure user for podman
+  hosts: update_hosts
+  become: true
+  become_method: sudo
 
-#   roles: 
-#     - role: "config_user_podman"
-#   tags: [config_podman_user]
+  roles: 
+    - role: "config_user_podman"
 
 # - name: Configure Desktop Env
 #   hosts: update_hosts

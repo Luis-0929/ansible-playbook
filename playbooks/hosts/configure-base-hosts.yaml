@@ -3,6 +3,7 @@ all:
     podman_user: podman
     hostname: dev-vm
     mode: development
+    gui: headless # or gui
 
 update_hosts:
   children:
