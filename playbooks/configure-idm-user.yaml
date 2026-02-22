@@ -1,0 +1,10 @@
+- name: Configure IPA user
+  hosts: target_hosts
+  become: true
+  become_method: sudo
+
+  vars_files:
+    - ../vault/secrets/vm_user_passwords_vault.yaml
+
+  roles:
+    - role: applications/idm/config_idm_user

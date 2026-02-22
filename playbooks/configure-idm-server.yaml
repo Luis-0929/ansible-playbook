@@ -1,0 +1,30 @@
+- name: Configure IPA server
+  hosts: target_hosts
+  become: true
+  become_method: sudo
+  
+  vars_files:
+    - ../vault/secrets/vm_user_passwords_vault.yaml
+
+  pre_tasks:
+    - name: Set the facts for ipa admin password
+      ansible.builtin.set_fact:
+        ipaadmin_password: "{{ ipa_idm_passwd }}"
+        ipadm_password: "{{ ipa_dm_passwd }}"
+    - name: Set static hostname
+      ansible.builtin.hostname:
+        name: "{{ ipaserver_hostname }}"
+        use: systemd
+    - name: Ensure IPA hostname exists in /etc/hosts
+      ansible.builtin.lineinfile:
+        path: /etc/hosts
+        regexp: "\\s{{ ipaserver_hostname }}(\\s|$)"
+        line: "{{ ansible_default_ipv4.address }} {{ ipaserver_hostname }} {{ static_hostname }}"
+        state: present
+
+  collections:
+    - freeipa.ansible_freeipa
+
+  roles:
+    - role: ipaserver
+      state: present

@@ -1,0 +1,22 @@
+---
+- name: Set ssh keys for admin user
+  ansible.posix.authorized_key:
+    user: admin
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ ssh_keys }}"
+
+- name: Set ssh keys for ansible user
+  ansible.posix.authorized_key:
+    user: ansible
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ ssh_keys }}"
+
+- name: Set ssh keys for podman user
+  ansible.posix.authorized_key:
+    user: podman
+    state: present
+    key: "{{ item }}"
+  with_items: "{{ ssh_keys }}"
+  when: "'podman' in users"

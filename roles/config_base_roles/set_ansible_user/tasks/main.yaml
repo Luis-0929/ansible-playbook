@@ -43,6 +43,10 @@
     - base_root_access.unreachable is defined
     - idm_access.unreachable is defined
 
+- name: Ouput the user ansible is using
+  ansible.builtin.debug:
+    msg: "Going in as the user: {{ ansible_user }}"
+
 
   
   

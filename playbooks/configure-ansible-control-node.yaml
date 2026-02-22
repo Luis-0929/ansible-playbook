@@ -1,0 +1,9 @@
+---
+- name: Build ansible control node
+  hosts: target_hosts
+  become: true
+  become_method: sudo
+
+  roles:
+    - role: common/ansible_pip_install
+    - role: common/collections_install

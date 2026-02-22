@@ -1,92 +1,21 @@
 ---
-- name: Set the ansible user
-  hosts: update_hosts
+- name: Configure the base alma9 vm
+  hosts: target_hosts
   become: true
   gather_facts: false
   become_method: sudo
 
-  roles:
-    - role: config_base_roles/set_ansible_user
-
-- name: Extend the LVM partition for {{ mode }}
-  hosts: update_hosts
-  become: true
-  become_method: sudo
-
-  roles:
-    - role: config_base_roles/extend_lvm
-
-- name: Configure users
-  hosts: update_hosts
-  become: true
-  become_method: sudo
-
   vars_files:
     - ../vault/secrets/vm_user_passwords_vault.yaml
-  
-  vars:
-    users:
-      - "admin"
-      - "ansible"
-      - "podman"
-  roles:  
-    - role: config_base_roles/config_users
 
-- name: Ensuring base packages are install_listed
-  hosts: update_hosts
-  become: true
-  become_method: sudo
-
-  vars:
-    listed_packages:
-      - epel-release
-      - podman
-      - vim
-      - curl
-      - wget
-      - git
-      - telnet
-      - bind-utils
-      - tree
-      - gcc
-      - chrony
-      - zip
-      - unzip
-      - ipa-client
-      - freerdp
-  
   roles:
-    - role: install_listed
-
-- name: Configure user for podman
-  hosts: update_hosts
-  become: true
-  become_method: sudo
-
-  roles: 
-    - role: "config_user_podman"
-
-# - name: Configure Desktop Env
-#   hosts: update_hosts
-#   become: true
-#   become_method: sudo
-  
-#   roles:
-#     - role: "config_desktop_env"
-#   tags: [config_desktop]
-
-# - name: Configure RDP server
-#   hosts: update_hosts
-#   become: true
-#   become_method: sudo
-#   vars_prompt:
-#     - name: rdp_user
-#       prompt: "Enter the RDP username"
-#       private: no
-#     - name: rdp_passwd
-#       prompt: "Enter the RDP users passwd"
-#       private: yes
-#       confirm: yes
-#   roles:
-#     - role: "config_rdp_server"
-#   tags: [config_rdp]
+    - role: config_base_roles/set_ansible_user
+    - role: common/set_hostname
+    - role: config_base_roles/extend_lvm
+      when: extend_mode is defined
+    - role: config_base_roles/config_users
+    - role: common/adjust_time
+    - role: config_base_roles/install_listed
+    - role: podman_roles/config_user_podman
+      when: "'podman' in users"
+    - role: config_base_roles/copy_ssh_keys

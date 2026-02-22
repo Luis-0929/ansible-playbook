@@ -1,4 +1,6 @@
 admin_passwd: 
 root_passwd: 
 podman_passwd: 
-ansible_passwd: 
+ansible_passwd:
+ipa_idm_passwd:
+ipa_dm_passwd:

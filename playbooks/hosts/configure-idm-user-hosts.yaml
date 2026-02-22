@@ -1,0 +1,19 @@
+all:
+  vars:
+    idm_host: idm.home.lab
+    
+    ipa_new_user: luis
+    user_title: engineer
+    first_name: Luis
+    last_name: Gallegos
+    email: luisrgallegos99@gmail.com
+    phone_number: 619-636-1860
+
+
+target_hosts:
+  children:
+    machines:
+
+machines:
+  hosts:
+    10.0.0.182 # Test vm

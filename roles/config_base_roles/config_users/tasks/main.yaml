@@ -1,1 +1,40 @@
-- include_tasks: config_user.yaml
+---
+- name: Ensuring user groups exists
+  ansible.builtin.group:
+    name: "{{ user_map[item].user_group }}"
+    gid: "{{ user_map[item].group_id }}"
+    state: present
+  with_items: "{{ users }}"
+
+- name: Create users
+  ansible.builtin.user:
+    name: "{{user_map[item].username }}"
+    uid: "{{user_map[item].user_id }}"
+    group: "{{user_map[item].user_group }}"
+    password: "{{user_map[item].password }}"
+    home: "{{ user_map[item].home_dir }}"
+    state: present
+  with_items: "{{ users }}"
+
+- name: Give sudo rights to users
+  ansible.builtin.copy:
+    dest: "/etc/sudoers.d/{{ user_map[item].sudo_filename }}"
+    content: "{{ user_map[item].sudo_rule }}\n"
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -cf %s'
+  with_items: "{{ users }}"
+  when: user_map[item].sudo | default(false)
+
+- name: Change root password and lock root account
+  ansible.builtin.user:
+    name: root
+    password: "{{ root_passwd }}"
+    password_lock: true
+
+- name: disable password ssh
+  meta: noop
+
+
+

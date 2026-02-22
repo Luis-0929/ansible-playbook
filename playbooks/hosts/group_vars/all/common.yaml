@@ -1,0 +1,5 @@
+podman_user: podman
+ssh_keys:
+  - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHQ43LuXWOH292OD7mFb8kGiP5I93pa1/4tUpkVi9oHq windows-key
+# wsl_pub_key:
+# ansible_control_node_pub_key: 

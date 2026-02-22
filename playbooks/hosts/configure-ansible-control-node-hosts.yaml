@@ -1,0 +1,12 @@
+# all:
+#   vars:
+#     wanted_packages:
+#       - python3-pip
+
+target_hosts:
+  children:
+    machines:
+    
+machines:
+  hosts:
+    10.0.0.224 # ansible.home.lab

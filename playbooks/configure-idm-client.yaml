@@ -1,0 +1,29 @@
+- name: Configure IPA server
+  hosts: target_hosts
+  become: true
+  become_method: sudo
+
+  vars_files:
+    - ../vault/secrets/vm_user_passwords_vault.yaml
+
+  pre_tasks:
+    - name: Ensure oddjobd service is running 
+      ansible.builtin.systemd_service:
+        state: started
+        name: oddjobd
+        enabled: true
+    - name: Enable auto creating of home dir and applying changes
+      ansible.builtin.shell: |
+        authselect select sssd with-mkhomedir --force && authselect apply-changes
+    - name: Set facts for 
+      ansible.builtin.set_fact:
+        ipaadmin_principal: admin
+        ipaadmin_password: "{{ ipa_idm_passwd }}"
+
+  collections:
+    - freeipa.ansible_freeipa
+
+  roles:
+    - role: common/configure_dns
+    - role: ipaclient
+      state: present

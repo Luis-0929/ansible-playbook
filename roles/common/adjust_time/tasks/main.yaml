@@ -1,0 +1,4 @@
+---
+- name: Adjust time
+  ansible.builtin.shell: | 
+    chronyc makestep

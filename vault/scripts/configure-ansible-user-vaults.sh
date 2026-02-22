@@ -10,7 +10,9 @@ setPasswords() {
   read -rp "Admin user password: " admin_pass
   read -rp "Ansible user password: " ansible_pass
   read -rp "Podman user password: " podman_pass
-  read -s -rp "Your IDM user password: " idm_user_pass; echo
+  read -rp "IPA IDM admin password: " ipa_idm_pass
+  read -rp "IPA IDM dm password: " ipa_dm_pass
+  read -rp "Your IDM user password: " idm_user_pass; echo
 
   while true; do
     echo "------------------------"
@@ -19,6 +21,9 @@ setPasswords() {
     echo "Admin user password = $admin_pass"
     echo "Ansible user password = $ansible_pass"
     echo "Podman user password = $podman_pass"
+    echo "IPA IDM admin password = $ipa_idm_pass"
+    echo "IPA IDM dm password = $ipa_dm_pass"
+    echo "IPA IDM user password = $idm_user_pass"
     read -rp "Are the above passwords correct? [Y/n] " yn
     echo "------------------------"
     case $yn in
@@ -70,6 +75,9 @@ sed -i "s,ansible_ssh_pass:,ansible_ssh_pass: ${ansible_pass},g" "$ansible_user_
 ansible-vault encrypt --vault-password-file="${vault_pass}" "${ansible_user_vault}"
 
 cp "$vm_user_vault_tempalte" "$vm_user_passwords_vault"
+
+sed -i "s,ipa_idm_passwd:,ipa_idm_passwd: ${ipa_idm_pass},g" "$vm_user_passwords_vault"
+sed -i "s,ipa_dm_passwd:,ipa_dm_passwd: ${ipa_dm_pass},g" "$vm_user_passwords_vault"
 
 sed -i "s,admin_passwd:,admin_passwd: ${admin_pass_hashed},g" "$vm_user_passwords_vault"
 sed -i "s,root_passwd:,root_passwd: ${root_pass_hashed},g" "$vm_user_passwords_vault"

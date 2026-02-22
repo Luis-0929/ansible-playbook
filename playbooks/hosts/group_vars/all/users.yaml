@@ -1,4 +1,33 @@
+---
 user_map:
-  "admin" : { user_id: "1023", home_dir: "/home/admin", user_group: "administrative", group_id: "1999", username: "admin" }
-  "podman" : { user_id: "1024", home_dir: "/home/podman", user_group: "development", group_id: "2000", username: "podman" }
-  "ansible" : { user_id: "1025", home_dir: "/home/ansible", user_group: "ansible", group_id: "2001", username: "ansible" }
+  admin:
+    user_id: "1023"
+    home_dir: "/home/admin"
+    user_group: "administrative"
+    group_id: "1999"
+    username: "admin"
+    password: "{{ (lookup('file', '{{ vault_dir }}/vm_user_passwords_vault.yaml') | from_yaml).admin_passwd }}"
+    sudo: true
+    sudo_filename: "admin"
+    sudo_rule: "admin ALL=(ALL) ALL"
+
+  ansible:
+    user_id: "1025"
+    home_dir: "/home/ansible"
+    user_group: "ansible"
+    group_id: "2001"
+    username: "ansible"
+    password: "{{ (lookup('file', '{{ vault_dir }}/vm_user_passwords_vault.yaml') | from_yaml).ansible_passwd }}"
+    sudo: true
+    sudo_filename: "ansible"
+    sudo_rule: "ansible ALL=(ALL) ALL"
+  
+  podman:
+    user_id: "1024"
+    home_dir: "/home/podman"
+    user_group: "development"
+    group_id: "2000"
+    username: "podman"
+    password: "{{ (lookup('file', '{{ vault_dir }}/vm_user_passwords_vault.yaml') | from_yaml).podman_passwd }}"
+
+

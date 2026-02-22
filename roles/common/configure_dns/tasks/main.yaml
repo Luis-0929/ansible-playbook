@@ -1,0 +1,16 @@
+---
+- name: Cofigure DNS to be pointed at IDM # nmcli connection up enp6s18
+  community.general.nmcli:
+    conn_name: "{{ ansible_default_ipv4.interface }}"
+    type: ethernet
+    dns4:
+      - "{{ dns_ip }}"
+    dns4_search:
+      - "{{ dns_search }}"
+    state: present
+  
+- name: Re-activate connection so DNS takes effect
+  ansible.builtin.shell: |
+    nmcli connection up {{ ansible_default_ipv4.interface }}
+
+  

@@ -1,15 +1,33 @@
 all:
   vars:
-    podman_user: podman
-    hostname: dev-vm
-    mode: development
-    gui: headless # or gui
+    hostname: ansible.home.lab
+    #extend_mode: var
+    wanted_packages:
+      - epel-release
+      - nc
+      - podman
+      - vim
+      - curl
+      - wget
+      - git
+      - bind-utils
+      - tree
+      - gcc
+      - chrony
+      - zip
+      - unzip
+      - ipa-client
+      - python3-pip
+    users:
+      - "admin"
+      - "ansible"
+      #- "podman"
 
-update_hosts:
+target_hosts:
   children:
     machines:
     
 machines:
   hosts:
-    10.0.0.100 #Dev VM
+    10.0.0.224 
 

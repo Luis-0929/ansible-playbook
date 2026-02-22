@@ -1,0 +1,19 @@
+---
+- name: create user
+  community.general.ipa_user:
+    name : "{{ ipa_new_user }}"
+    state: present
+    password: "{{ (lookup('file', '{{ vault_dir }}/idm-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
+    loginshell: /bin/bash
+    title: "{{ user_title }}"
+    krbpasswordexpiration: 2030-09-29
+    givenname: "{{ first_name }}"
+    sn: "{{ last_name }}"
+    mail:
+      - "{{ email }}"
+    telephonenumber:
+      - "{{ phone_number }}"
+    homedirectory: "/home/{{ ipa_new_user }}"
+    ipa_host: "{{ idm_host }}"
+    ipa_user: admin
+    ipa_pass: "{{ ipa_idm_passwd }}" # Change

@@ -1,0 +1,5 @@
+---
+- name: Install ansible using pip
+  become_user: ansible
+  ansible.builtin.pip:
+    name: ansible

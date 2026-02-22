@@ -6,5 +6,5 @@
 
 - name: Install the listed packages {{ listed_packages }}
   dnf:
-    name: "{{ listed_packages }}"
+    name: "{{ wanted_packages }}"
     state: present

@@ -1,0 +1,18 @@
+all:
+  vars:
+    static_hostname: idm
+    ipaserver_hostname: idm.home.lab
+    ipaserver_domain: home.lab
+    ipaserver_realm: HOME.LAB
+    ipaserver_setup_dns: yes
+    ipaserver_auto_reverse: yes
+    ipaserver_auto_fowarders: yes
+    ipaserver_forwarders: 10.0.0.1
+
+target_hosts:
+  children:
+    machines:
+
+machines:
+  hosts:
+    10.0.0.100
