@@ -1,47 +1,47 @@
 ---
-- name: Check if ansible user can be used 
-  ansible.builtin.ping:
-  ignore_unreachable: true
-  ignore_errors: true
-  changed_when: false
-  no_log: false
-  register: ansible_access
+# - name: Check if ansible user can be used 
+#   ansible.builtin.ping:
+#   ignore_unreachable: true
+#   ignore_errors: true
+#   changed_when: false
+#   no_log: false
+#   register: ansible_access
 
 - name: Set facts for ansible user to be alma9 base root user
   ansible.builtin.set_fact:
     ansible_user: root
     ansible_ssh_pass: "{{ (lookup('file', '{{ vault_dir }}/alma9-base-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
     ansible_become_password: "{{ (lookup('file', '{{ vault_dir }}/alma9-base-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
-  when: ansible_access.unreachable is defined
+  # when: ansible_access.unreachable is defined
 
 - name: Check to see if alma9 base root user has access to the hosts
   ansible.builtin.ping:
   register: base_root_access
-  when: ansible_access.unreachable is defined
+  # when: ansible_access.unreachable is defined
 
-- name: Set facts for IDM user 
-  ansible.builtin.set_fact:
-    ansible_user: luis
-    ansible_ssh_pass: "{{ (lookup('file', '{{ vault_dir }}/idm-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
-    ansible_become_password: "{{ (lookup('file', '{{ vault_dir }}/idm-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
-  when:
-    - ansible_access.unreachable is defined
-    - base_root_access.unreachable is defined
+# - name: Set facts for IDM user 
+#   ansible.builtin.set_fact:
+#     ansible_user: luis
+#     ansible_ssh_pass: "{{ (lookup('file', '{{ vault_dir }}/idm-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
+#     ansible_become_password: "{{ (lookup('file', '{{ vault_dir }}/idm-user-vault.yaml') | from_yaml).ansible_ssh_pass }}"
+#   when:
+#     - ansible_access.unreachable is defined
+#     - base_root_access.unreachable is defined
 
-- name: Check if IDM user has access
-  ansible.builtin.ping:
-  register: idm_access
-  when:
-    - ansible_access.unreachable is defined
-    - base_root_access.unreachable is defined
+# - name: Check if IDM user has access
+#   ansible.builtin.ping:
+#   register: idm_access
+#   when:
+#     - ansible_access.unreachable is defined
+#     - base_root_access.unreachable is defined
 
 - name: Fail Playbook when no user can reach host
   ansible.builtin.fail:
     msg: "Could not reach {{ inventory_hostname}} as any user" 
   when: 
-    - ansible.unreachable is defined
+    # - ansible.unreachable is defined
     - base_root_access.unreachable is defined
-    - idm_access.unreachable is defined
+    # - idm_access.unreachable is defined
 
 - name: Ouput the user ansible is using
   ansible.builtin.debug:

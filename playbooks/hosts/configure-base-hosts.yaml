@@ -18,10 +18,11 @@ all:
       - unzip
       - ipa-client
       - python3-pip
+      - sshpass
     users:
       - "admin"
       - "ansible"
-      #- "podman"
+      - "podman"
 
 target_hosts:
   children:
@@ -29,5 +30,5 @@ target_hosts:
     
 machines:
   hosts:
-    10.0.0.224 
+    10.0.0.185
 
