@@ -33,8 +33,12 @@
     password: "{{ root_passwd }}"
     password_lock: true
 
-- name: disable password ssh
-  meta: noop
+- name: Disable SSH password authentication
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^#?PasswordAuthentication'
+    line: 'PasswordAuthentication no'
+    state: present
 
 
 

@@ -4,7 +4,7 @@
     state: latest
     update_cache: true
 
-- name: Install the listed packages {{ listed_packages }}
+- name: Install the listed packages {{ wanted_packages }}
   dnf:
     name: "{{ wanted_packages }}"
     state: present
