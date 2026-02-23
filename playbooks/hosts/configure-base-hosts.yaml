@@ -1,7 +1,6 @@
 all:
   vars:
-    hostname: idm.home.lab
-    extend_mode: var
+    hostname: ansible.home.lab
     wanted_packages:
       - epel-release
       - nc
@@ -30,5 +29,5 @@ target_hosts:
     
 machines:
   hosts:
-    10.0.0.100
+    10.0.0.110
 

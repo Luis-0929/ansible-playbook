@@ -1,4 +1,8 @@
 ---
+all:
+  vars:
+    ssh_key_comment: "ansible control node key"
+
 target_hosts:
   children:
     machines:

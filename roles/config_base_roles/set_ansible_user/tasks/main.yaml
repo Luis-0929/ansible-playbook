@@ -47,6 +47,6 @@
   ansible.builtin.debug:
     msg: "Going in as the user: {{ ansible_user }}"
 
-
-  
-  
+- name: Sleep for 6 seconds and continue with play
+  ansible.builtin.wait_for:
+    timeout: 6

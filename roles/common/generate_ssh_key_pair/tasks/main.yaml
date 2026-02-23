@@ -1,0 +1,8 @@
+---
+- name: make keys
+  community.crypto.openssh_keypair:
+    path: /home/ansible/.ssh/id_ed25519
+    type: ed25519
+    comment: "{{ ssh_key_comment }}"
+    group: ansible
+    owner: ansible

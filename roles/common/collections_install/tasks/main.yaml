@@ -1,5 +1,7 @@
 ---
 - name: Install collections
+  become_user: ansible
   community.general.ansible_galaxy_install:
     type: collection
-    name: "{{ collections_list }}"
+    name: "{{ item }}"
+  with_items: "{{ collections_list }}"

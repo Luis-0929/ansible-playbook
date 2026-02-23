@@ -7,3 +7,4 @@
   roles:
     - role: common/ansible_pip_install
     - role: common/collections_install
+    - role: common/generate_ssh_key_pair

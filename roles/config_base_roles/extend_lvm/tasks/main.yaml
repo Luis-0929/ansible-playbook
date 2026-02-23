@@ -1,5 +1,5 @@
 ---
 - name: Run the extend script for {{ extend_mode }}
-  any_errors_fatal: true
+  ignore_errors: true
   ansible.builtin.shell: |
     /root/vm-scripts/extend_for_{{ extend_mode }}.sh

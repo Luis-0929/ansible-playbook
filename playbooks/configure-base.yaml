@@ -11,8 +11,8 @@
   roles:
     - role: config_base_roles/set_ansible_user
     - role: common/set_hostname
-    - role: config_base_roles/extend_lvm
-      when: extend_mode is defined
+    # - role: config_base_roles/extend_lvm
+    #   when: extend_mode is defined
     - role: config_base_roles/config_users
     - role: common/adjust_time
     - role: config_base_roles/install_listed
