@@ -3,11 +3,13 @@ all:
     ipaservers: idm.home.lab
     dns_ip: 10.0.0.100
     dns_search: home.lab
-    ipaclients: dev.home.lab
+
+    ipaclients: ansible.home.lab
+
 target_hosts:
   children:
     machines:
 
 machines:
   hosts:
-    10.0.0.182 #Dev 2 vm
+    10.0.0.110
