@@ -16,4 +16,5 @@
     homedirectory: "/home/{{ ipa_new_user }}"
     ipa_host: "{{ idm_host }}"
     ipa_user: admin
-    ipa_pass: "{{ ipa_idm_passwd }}" # Change
+    ipa_pass: "{{ ipa_idm_passwd }}"
+    sshpubkey: "{{ ssh_keys }}"

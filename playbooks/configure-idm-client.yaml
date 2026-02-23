@@ -14,8 +14,8 @@
         enabled: true
     - name: Enable auto creating of home dir and applying changes
       ansible.builtin.shell: |
-        authselect select sssd with-mkhomedir --force && authselect apply-changes
-    - name: Set facts for 
+        authselect enable-feature with-mkhomedir
+    - name: Set facts for ipaadmin
       ansible.builtin.set_fact:
         ipaadmin_principal: admin
         ipaadmin_password: "{{ ipa_idm_passwd }}"
