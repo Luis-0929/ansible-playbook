@@ -1,0 +1,22 @@
+---
+- name: Deploying prometheus
+  hosts: target_hosts
+  become: true
+  become_method: sudo
+
+  vars_files: 
+    - quadlet_vars/prometheus.yaml
+
+  roles:
+    - role: podman_roles/quadlet_container
+
+# - name: Deploying grafana
+#   hosts: target_hosts
+#   become: true
+#   become_method: sudo
+
+#   vars_files: 
+#     - quadlet_vars/grafana.yaml
+
+#   roles:
+#     - role: podman_roles/quadlet_container

@@ -1,0 +1,22 @@
+---
+container_image: "docker.io/grafana/grafana"
+container_name: grafana
+container_description: "Container for grafana observation tool"
+container_hostname: "grafana"
+
+publish_ports:
+  - desc: "Web GUI"
+    port: "3000:3000/tcp"
+
+# container_volumes:
+#   - name: "grafana-storage"
+#     path: "/var/lib/grafana
+#     create: true
+#     link_to_home: true
+
+# health_cmds:
+#   cmd: "curl -s http://localhost:3000 || exit 1"
+#   interval: 10s
+#   retries: 2
+#   startup: 30s
+#   onfail: kill

@@ -1,0 +1,48 @@
+---
+- name: Disable swap
+  ansible.builtin.shell: |
+    swapoff -a
+    sed -i '/^[^#].*\sswap\s/ s/^/#/' /etc/fstab
+
+- name: Configure ports for control plane
+  ansible.posix.firewalld:
+    port: "{{ item }}"
+    permanent: true
+    zone: public
+    state: enabled
+    immediate: true
+  with_items:
+    - 6443/tcp
+    - 2379/tcp
+    - 2380/tcp
+    - 10250/tcp
+    - 10259/tcp
+
+- name: Configure /etc/modules-load.d/k8s.conf
+  meta: noop
+
+- name: Configure /etc/sysctl.d/k8s.conf
+  meta: noop
+
+- name: Disable SELinux
+  meta: noop
+
+- name: Add container runtime repo
+  meta: noop
+
+- name: Add containerd.io from new added repo
+  meta: noop
+
+- name: set SystemdCgroup = true # Use line in file
+  meta: noop
+
+- name: Enable and start containerd service
+  meta: noop
+
+- name: Add kube repo
+  meta: noop
+
+- name: install kubelet kubeadm kubectl
+  meta: noop
+
+- name: Enable kublet service # enable and not start yet

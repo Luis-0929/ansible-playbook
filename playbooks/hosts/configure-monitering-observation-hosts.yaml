@@ -1,0 +1,15 @@
+---
+all:
+  vars:
+    user: podman
+    user_group: development
+    podman_user: podman
+
+target_hosts:
+  children:
+    machines:
+
+machines:
+  hosts:
+    10.0.0.178
+    #monitor.home.lab

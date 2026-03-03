@@ -1,0 +1,17 @@
+---
+container_image: "docker.io/prom/prometheus"
+container_name: prometheus
+container_description: "Container for prometheus monitoring tool"
+container_hostname: "prometheus"
+
+publish_ports:
+  - desc: "Web GUI"
+    port: "9090:9090/tcp"
+
+
+# health_cmds:
+#   cmd: "curl -s http://localhost:9090 || exit 1"
+#   interval: 10s
+#   retries: 2
+#   startup: 30s
+#   onfail: kill

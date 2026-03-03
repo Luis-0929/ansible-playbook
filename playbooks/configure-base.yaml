@@ -14,8 +14,8 @@
     # - role: config_base_roles/extend_lvm
     #   when: extend_mode is defined
     - role: config_base_roles/config_users
+    - role: config_base_roles/copy_ssh_keys
     - role: common/adjust_time
     - role: config_base_roles/install_listed
     - role: podman_roles/config_user_podman
       when: "'podman' in users"
-    - role: config_base_roles/copy_ssh_keys

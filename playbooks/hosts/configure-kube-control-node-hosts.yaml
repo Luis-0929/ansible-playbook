@@ -1,0 +1,14 @@
+all:
+  vars:
+    master: true
+    worker: false
+
+
+
+target_hosts:
+  children:
+    machines:
+
+machines:
+  hosts:
+    test1.home.lab

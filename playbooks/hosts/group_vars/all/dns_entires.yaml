@@ -1,3 +1,9 @@
 dns_entries:
-  ansible:
+  idm2.home.lab:
+    ip: 10.0.0.101
+  monitor.home.lab:
+    ip: 10.0.0.102
+  ansible.home.lab:
     ip: 10.0.0.110
+  dev.home.lab:
+    ip: 10.0.0.111
